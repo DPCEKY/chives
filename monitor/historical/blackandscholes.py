@@ -6,7 +6,7 @@ from scipy import sqrt, log, exp
 from scipy.stats import norm
 from scipy.optimize import fsolve
 
-from constants import *
+from .constants import *
 
 
 def riskfree():
