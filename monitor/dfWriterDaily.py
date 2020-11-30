@@ -1,9 +1,7 @@
 import pandas as pd 
 from os import path, makedirs
 
-parse_dates = ['Date']
-
-class dfWriterBase:
+class dfWriterDaily:
   def writeDfTo(self, base_path='', data_frame=pd.DataFrame()):
     lines_num = data_frame.shape[0]
 
@@ -14,20 +12,22 @@ class dfWriterBase:
     if not path.exists(base_path):
       makedirs(base_path)
 
-    last_filename = data_frame.loc[0]['Date'].strftime('%Y%m')
+    last_filename = data_frame.index[0].strftime('%Y%m%d')
     last_index = 0
     for i in range(1, lines_num):
-      curr_filename = data_frame.loc[i]['Date'].strftime('%Y%m')
+      curr_filename = data_frame.index[i].strftime('%Y%m%d')
       if last_filename != curr_filename or i >= lines_num - 1:
         filepath = base_path + last_filename + '.csv'
-        end_index = lines_num if i >= lines_num - 1 else i
-        
+        end_index = lines_num - 1 if i >= lines_num - 1 else i - 1
+        date_last_index = data_frame.index[last_index]
+        date_end_index = data_frame.index[end_index]
         if not path.exists(filepath):
           file_ptr = open(filepath, "w")
-          data_frame[last_index:end_index].to_csv(index=False, path_or_buf=file_ptr, date_format='%Y-%m-%d-%H-%M-%S')
+          
+          data_frame[date_last_index: date_end_index].to_csv(path_or_buf=file_ptr, date_format='%Y-%m-%d-%H-%M-%S GMT%z')
           file_ptr.close()
         else:
-          self.appendDfToFullPath(filepath, data_frame[last_index:end_index])
+          self.appendDfToFullPath(filepath, data_frame[date_last_index: date_end_index])
 
         last_index = i
         last_filename = curr_filename
@@ -37,22 +37,17 @@ class dfWriterBase:
       print('empty data_frame/full_path input! return..')
       return
 
-    date_parser = pd.to_datetime
-    old_content = pd.read_csv(full_path, parse_dates=parse_dates, date_parser=date_parser)
+    date_parser = lambda col: pd.to_datetime(col, format="%Y-%m-%d-%H-%M-%S GMT%z")
+    old_content = pd.read_csv(full_path, index_col=0, date_parser=date_parser)
     
-    # suppress the chained assignment warning, expected here
-    pd.set_option('mode.chained_assignment', None)
-    data_frame['Date'] = pd.to_datetime(data_frame['Date'], utc=True)
-    pd.set_option('mode.chained_assignment', 'raise')
-
     result = pd.concat([old_content, data_frame])
+    
+    # # sorting by Date
+    result.sort_index(inplace=True)
 
-    # sorting by Date
-    result.sort_values("Date", inplace = True)
-      
     # dropping ALL duplicte values
-    result.drop_duplicates(subset ="Date", keep = 'first', inplace = True)
-
+    result = result[~result.index.duplicated()]
+    
     old_num = old_content.shape[0]
     new_num = result.shape[0]
 
