@@ -39,14 +39,20 @@ class dfWriterBase:
 
     date_parser = pd.to_datetime
     old_content = pd.read_csv(full_path, parse_dates=parse_dates, date_parser=date_parser)
+    
+    # suppress the chained assignment warning, expected here
+    pd.set_option('mode.chained_assignment', None)
+    data_frame['Date'] = pd.to_datetime(data_frame['Date'], utc=True)
+    pd.set_option('mode.chained_assignment', 'raise')
+
     result = pd.concat([old_content, data_frame])
 
     # sorting by Date
     result.sort_values("Date", inplace = True)
       
     # dropping ALL duplicte values
-    result.drop_duplicates(subset ="Date", keep = False, inplace = True)
-    
+    result.drop_duplicates(subset ="Date", keep = 'first', inplace = True)
+
     old_num = old_content.shape[0]
     new_num = result.shape[0]
 
