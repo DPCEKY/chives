@@ -1,0 +1,33 @@
+{
+  "model": [
+    {
+      "name": "dt",
+      "param": {
+        "nfc": 0.05
+      },
+      "comment": "nfc represents for normal_fluctuation_range, in [0, 1]",
+      "include_report": 1
+    },
+    {
+      "name": "hmm",
+      "param": {
+        "...": "..."
+      },
+      "comment": "hidden markov model"
+    },
+    {
+      "name": "tsa",
+      "param": {
+        "...": "..."
+      },
+      "comment": "time serise analysis"
+    }
+  ],
+  "inter_model_param": {
+    "combination": "majority_vote",
+    "dt_weight": 0.7,
+    "hmm_weight": 0.1,
+    "tsa_weight": 0.2,
+    "comment": "combination could be weighted majority vote, etc."
+  }
+}

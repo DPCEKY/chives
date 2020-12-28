@@ -1,0 +1,22 @@
+{
+  "mode": "bt",
+  "mode_comment": "bt - back test, oe - online experiment",
+  "time_range": {
+    "start": "2020-01-01",
+    "end": "2020-09-30",
+    "comment": "end can be default: up to latest day"
+  },
+  "stocks": [
+    {
+      "symbol": "goog",
+      "init_volume": "0.6"
+    },
+    {
+      "symbol": "fb",
+      "init_volume": "0.4"
+    }
+  ],
+  "volume": "10000",
+  "volume_comment": "in usd",
+  "comment": "global expt config, setting stocks, train set, test set, online oe time range, etc."
+}
