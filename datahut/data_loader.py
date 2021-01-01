@@ -9,6 +9,7 @@ class data_loader:
     self.data = {}
     self.symbol = symbol
     self.mode = mode
+    self.interval = interval
 
     self.__load_data(load_path, mode, interval)
 
