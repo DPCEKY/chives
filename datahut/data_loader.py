@@ -1,6 +1,8 @@
 import pandas as pd
 import os
-
+from ..monitor.dfWriterBase import *
+from ..monitor.dfWriterDaily import *
+from ..monitor.historical.wallstreet import Stock, Call, Put
 
 class data_loader:
   def __init__(
@@ -18,8 +20,8 @@ class data_loader:
       print('[FETAL] invalid data mode! valid modes: "historical", "daily"')
       return
 
-    load_path = os.path.abspath(load_path + mode)
-    print("load_path = {}".format(load_path))
+    load_path = os.path.abspath(load_path + "/" + mode)
+    print("[data_loader] load_path = {}".format(load_path))
 
     if mode == "historical":
       full_path = "{}/{}/".format(load_path, self.symbol)
@@ -28,10 +30,12 @@ class data_loader:
 
     if not os.path.exists(full_path):
       print("no {} data for {} in {}".format(mode, self.symbol, full_path))
+      if mode == "historical":
+        self.__download_historical_data(full_path, mode)
 
-    self.__fetch_data(full_path)
+    self.__fetch_from_memory(full_path)
 
-  def __fetch_data(self, full_path):
+  def __fetch_from_memory(self, full_path):
     if self.mode == "historical":
       date_parser = pd.to_datetime
 
@@ -49,6 +53,13 @@ class data_loader:
     elif self.mode == "daily":
       print("mode {} data loading is not supported now".format(self.mode))
       pass
+
+  def __download_historical_data(self, download_path, mode):
+    dfb = dfWriterBase()
+    s = Stock(self.symbol)
+    # download all historical data here
+    df = s.historical(days_back=36500, frequency="d")
+    dfb.writeDfTo(download_path, df)
 
   def at(self, date="2012-05-21"):
     month = date

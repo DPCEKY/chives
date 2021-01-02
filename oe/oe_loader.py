@@ -1,23 +1,23 @@
 import json
 import os
 import pandas as pd
+from ..datahut.data_loader import data_loader
 
-
-class packed_bt_data:
-  def __init__(self):
-    self.data = {}
 
 
 class expt_loader:
-  def __init__(self):
+  def __init__(
+    self, oe_name="example_expt_0", expt="expt", control="control", test="test"
+  ):
     self.expt_cfg = {}
     self.control_cfg = {}
     self.test_cfg = {}
+    self.stocks = []
 
-  def load_cfg(
-    self, oe_name="example_expt_0", expt="expt", control="control", test="test"
-  ):
-    oe_path = os.getcwd() + "/oe_test/" + oe_name + "/"
+    self.__load_cfg(oe_name, expt, control, test)
+
+  def __load_cfg(self, oe_name, expt, control, test):
+    oe_path = os.getcwd() + "/chives/oe/oe_test/" + oe_name + "/"
 
     if not os.path.exists(oe_path):
       print("empty {} input! return..".format(oe_path))
@@ -38,55 +38,29 @@ class expt_loader:
     control_cfg_ptr.close()
     test_cfg_ptr.close()
 
+    self.__load_data(oe_name, expt, control, test)
+
     return self.expt_cfg, self.control_cfg, self.test_cfg
 
-  def load_data(
-    self, oe_name="example_expt_0", expt="expt", control="control", test="test"
-  ):
-    if len(self.expt_cfg) == 0:
-      self.load_cfg(oe_name, expt, control, test)
-
-    stocks = self.expt_cfg["stocks"]
+  def __load_data(self, oe_name, expt, control, test):
+    stocks_cfg = self.expt_cfg["stocks"]
     symbols = []
-    for stock in stocks:
+    for stock in stocks_cfg:
       symbols.append(stock["symbol"])
 
+    load_path = os.path.abspath(os.getcwd() + "/chives/datahut/data/")
+    print("[oe_loader] load_path = {}".format(load_path))
 
-    
-    historical_path = os.path.abspath(os.getcwd() + "/../datahut/data/historical/")
-    print("historical_path = {}".format(historical_path))
+    mode = self.expt_cfg["time_range"]["mode"]
 
     for symbol in symbols:
-      full_path = historical_path + "/" + symbol + "/"
+      stock = data_loader(symbol=symbol, load_path=load_path, mode=mode)
+      print(stock.at("2012-05-21"))
+      self.stocks.append(stock)
 
-      if not os.path.exists(full_path):
-        print("no historical data for " + symbol)
-        self.fetch_data(symbol)
-
-      for filename in os.listdir(full_path):
-        print(os.path.join(full_path, filename))
-        continue
-      exit()
-
-      date_parser = pd.to_datetime
-      data = pd.read_csv(full_path, parse_dates=["Date"], date_parser=date_parser)
-
-
-
-      data.set_index("Date", inplace=True)
-      # print(data.index)
-
-      row = data.loc["2012-05-21"]
-      print(type(row))
-      print(row)
-      print(row["Volume"])
-
-  def fetch_data(self, symbol):
-    print("[FETAL]fetch_data not implemeted.")
-    pass
 
 if __name__ == "__main__":
-  loader = expt_loader()
+  expt = expt_loader()
 
   # data = loader.load_cfg()
   # print(data[0])
@@ -103,5 +77,3 @@ if __name__ == "__main__":
 
   # print("2020-09-22" > "2020-01-23")
   # print("2020-09-22" <= "2020-01-23")
-
-  data = loader.load_data()
