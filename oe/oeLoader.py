@@ -1,7 +1,8 @@
 import json
 import os
 import pandas as pd
-from ..datahut.data_loader import data_loader
+from ..datahut.dataLoader import dataLoader
+from ..model import (dd, modelBase)
 
 
 
@@ -15,6 +16,7 @@ class exptLoader:
     self.stocks = []
 
     self.__load_cfg(oe_name, expt, control, test)
+    self.control_models = self.__load_model(self.expt_cfg, self.control_cfg)
 
   def __load_cfg(self, oe_name, expt, control, test):
     oe_path = os.getcwd() + "/chives/oe/oe_test/" + oe_name + "/"
@@ -54,10 +56,23 @@ class exptLoader:
     mode = self.expt_cfg["time_range"]["mode"]
 
     for symbol in symbols:
-      stock = data_loader(symbol=symbol, load_path=load_path, mode=mode)
+      stock = dataLoader(symbol=symbol, load_path=load_path, mode=mode)
       # print(stock.at("2012-05-21"))
       self.stocks.append(stock)
 
+  def __load_model(self, expt_cfg, arm_cfg):
+    start = expt_cfg["time_range"]["start"]
+    end = expt_cfg["time_range"]["end"]
+    arm_models = {}
+    for model_cfg in arm_cfg["models"]:
+      if model_cfg["name"] == "dd":
+        dd1 = dd.dd(start, end)
+        # print(dd1.predict(self.stocks[0]))
+        arm_models["dd"] = dd1
+      else:
+        pass
+
+    return arm_models
 
 if __name__ == "__main__":
   expt = exptLoader()

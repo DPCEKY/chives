@@ -2,7 +2,7 @@
   "mode": "bt",
   "mode_comment": "bt - back test, oe - online experiment",
   "time_range": {
-    "start": "2020-01-01",
+    "start": "2020-01-02",
     "end": "2020-09-30",
     "mode": "historical",
     "comment": "end can be default: up to latest day. mode support historical, realtime, and all"

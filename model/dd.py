@@ -1,15 +1,15 @@
 # direct deposit strategy - revenue = end - start
 import json
 import os
-import model.modelBase
+from .modelBase import *
 
 
-class dd(modelbase):
+class dd(modelBase):
   def __init__(self, start, end):
     self.start = start
     self.end = end
 
-  def __predict(self, stock_loader):
+  def predict(self, stock_loader):
     first_day_info = stock_loader.at(self.start)
     last_day_info = stock_loader.at(self.end)
 

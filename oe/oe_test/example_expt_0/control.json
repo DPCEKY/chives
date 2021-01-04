@@ -1,4 +1,11 @@
 {
-  "model": "dd",
-  "param": {}
+  "models": [
+    {
+      "name": "dd",
+      "param": {},
+      "comment": "direct deposit",
+      "include_report": 1
+    }
+  ],
+  "inter_model_param": {}
 }

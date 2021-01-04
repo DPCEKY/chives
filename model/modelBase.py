@@ -5,5 +5,5 @@ class modelBase():
   def __init__(self):
     pass
 
-  def __predict(self):
+  def predict(self):
     pass
