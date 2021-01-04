@@ -5,7 +5,7 @@ from ..datahut.data_loader import data_loader
 
 
 
-class expt_loader:
+class exptLoader:
   def __init__(
     self, oe_name="example_expt_0", expt="expt", control="control", test="test"
   ):
@@ -55,12 +55,12 @@ class expt_loader:
 
     for symbol in symbols:
       stock = data_loader(symbol=symbol, load_path=load_path, mode=mode)
-      print(stock.at("2012-05-21"))
+      # print(stock.at("2012-05-21"))
       self.stocks.append(stock)
 
 
 if __name__ == "__main__":
-  expt = expt_loader()
+  expt = exptLoader()
 
   # data = loader.load_cfg()
   # print(data[0])

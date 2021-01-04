@@ -4,9 +4,14 @@ from ..monitor.dfWriterBase import *
 from ..monitor.dfWriterDaily import *
 from ..monitor.historical.wallstreet import Stock, Call, Put
 
-class data_loader:
+
+class dataLoader:
   def __init__(
-    self, symbol="fb", load_path="data/", mode="historical", interval="1m"
+    self,
+    symbol="fb",
+    load_path="chives/datahut/data/",
+    mode="historical",
+    interval="1m",
   ):
     self.data = {}
     self.symbol = symbol
@@ -15,13 +20,13 @@ class data_loader:
 
     self.__load_data(load_path, mode, interval)
 
-  def __load_data(self, load_path="data/", mode="historical", interval="1m"):
+  def __load_data(self, load_path, mode, interval):
     if not mode in ["historical", "daily"]:
       print('[FETAL] invalid data mode! valid modes: "historical", "daily"')
       return
 
     load_path = os.path.abspath(load_path + "/" + mode)
-    print("[data_loader] load_path = {}".format(load_path))
+    print("[dataLoader] load_path = {}".format(load_path))
 
     if mode == "historical":
       full_path = "{}/{}/".format(load_path, self.symbol)
@@ -73,7 +78,7 @@ class data_loader:
 
 
 if __name__ == "__main__":
-  stock = data_loader("goog")
+  stock = dataLoader("goog")
 
   # data = loader.load_cfg()
   # print(data[0])
@@ -90,7 +95,6 @@ if __name__ == "__main__":
 
   # print("2020-09-22" > "2020-01-23")
   # print("2020-09-22" <= "2020-01-23")
-
 
   row = stock.at("2020-01-23")
   print(type(row))
