@@ -26,12 +26,13 @@ class dataLoader:
       return
 
     load_path = os.path.abspath(load_path + "/" + mode)
-    print("[dataLoader] load_path = {}".format(load_path))
 
     if mode == "historical":
       full_path = "{}/{}/".format(load_path, self.symbol)
     elif mode == "daily":
       full_path = "{}/{}_{}/".format(load_path, self.symbol, interval)
+
+    print("[dataLoader] full_path = {}".format(full_path))
 
     if not os.path.exists(full_path):
       print("no {} data for {} in {}".format(mode, self.symbol, full_path))

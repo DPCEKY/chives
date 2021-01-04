@@ -67,7 +67,7 @@ class exptLoader:
     for model_cfg in arm_cfg["models"]:
       if model_cfg["name"] == "dd":
         dd1 = dd.dd(start, end)
-        # print(dd1.predict(self.stocks[0]))
+        print(dd1.predict(self.stocks[0]))
         arm_models["dd"] = dd1
       else:
         pass
