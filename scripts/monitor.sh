@@ -1,6 +1,5 @@
 #!/bin/bash
 
-su -i
 cd ~
 
 git pull
