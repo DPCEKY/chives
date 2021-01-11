@@ -3,8 +3,7 @@
     {
       "name": "dd",
       "param": {},
-      "comment": "direct deposit",
-      "include_report": 1
+      "comment": "direct deposit"
     }
   ],
   "inter_model_param": {}

@@ -5,8 +5,7 @@
       "param": {
         "nfc": 0.05
       },
-      "comment": "nfc represents for normal_fluctuation_range, in [0, 1]",
-      "include_report": 1
+      "comment": "nfc represents for normal_fluctuation_range, in [0, 1]"
     },
     {
       "name": "hmm",

@@ -17,7 +17,9 @@
       "init_volume": "0.4"
     }
   ],
-  "volume": "10000",
+  "stocks_comment": "currently only first symbol is considered, multi-group analysis to be added",
+  "volume": 10000,
   "volume_comment": "in usd",
+  "include_report": 1,
   "comment": "global expt config, setting stocks, train set, test set, online oe time range, etc."
 }

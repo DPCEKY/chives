@@ -6,17 +6,18 @@ from ..model import (dd, modelBase)
 
 
 
-class exptLoader:
+class oeLoader:
   def __init__(
     self, oe_name="example_expt_0", expt="expt", control="control", test="test"
   ):
     self.expt_cfg = {}
     self.control_cfg = {}
     self.test_cfg = {}
-    self.stocks = []
+    self.stocks = {}
 
     self.__load_cfg(oe_name, expt, control, test)
     self.control_models = self.__load_model(self.expt_cfg, self.control_cfg)
+    self.test_models = self.__load_model(self.expt_cfg, self.test_cfg)
 
   def __load_cfg(self, oe_name, expt, control, test):
     oe_path = os.getcwd() + "/chives/oe/oe_test/" + oe_name + "/"
@@ -58,7 +59,7 @@ class exptLoader:
     for symbol in symbols:
       stock = dataLoader(symbol=symbol, load_path=load_path, mode=mode)
       # print(stock.at("2012-05-21"))
-      self.stocks.append(stock)
+      self.stocks[symbol] = stock
 
   def __load_model(self, expt_cfg, arm_cfg):
     start = expt_cfg["time_range"]["start"]
@@ -67,7 +68,7 @@ class exptLoader:
     for model_cfg in arm_cfg["models"]:
       if model_cfg["name"] == "dd":
         dd1 = dd.dd(start, end)
-        print(dd1.predict(self.stocks[0]))
+        # print(dd1.predict(list(stocks.values())[0]))
         arm_models["dd"] = dd1
       else:
         pass
@@ -75,7 +76,7 @@ class exptLoader:
     return arm_models
 
 if __name__ == "__main__":
-  expt = exptLoader()
+  expt = oeLoader()
 
   # data = loader.load_cfg()
   # print(data[0])
