@@ -19,4 +19,4 @@ sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 1
 
 pip3 install pandas bs4 scipy yfinance
 
-
+git pull git@github.com:DPCEKY/chives.git
