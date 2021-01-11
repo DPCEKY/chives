@@ -1,17 +1,49 @@
-from dfWriterBase import *
-from dfWriterDaily import *
-from historical.wallstreet import Stock, Call, Put
+import os
+from .dfWriterBase import *
+from .dfWriterDaily import *
+from .historical.wallstreet import Stock, Call, Put
 import yfinance as yf
 
-dfb = dfWriterBase()
-stock_name = "fb"
-path = "../datahut/data/historical/" + stock_name + "/"
-s = Stock(stock_name)
-df = s.historical(days_back=400, frequency="d")
-dfb.writeDfTo(path, df)
+#  run outside the root dir
 
-dfb = dfWriterDaily()
-interval="2m"
-path = "../datahut/data/daily/" + stock_name + "_" + interval + "/"
-df = yf.download(stock_name, period="60d", interval=interval, prepost=True)
-dfb.writeDfTo(path, df)
+stock_names = [
+  "fb",
+  "goog",
+  "aapl",
+  "baba",
+  "amzn",
+  "msft",
+  "tsla",
+  "nio",
+  "nflx",
+  "pins",
+  "snap",
+  "uber",
+  "lyft",
+  "xpev",
+  "twtr",
+  "pdd",
+  "bili",
+  "ba",
+  "snow",
+  "crm",
+  "abnb",
+]
+
+for stock_name in stock_names:
+  dfb = dfWriterBase()
+  path = os.getcwd() + "/chives/datahut/data/historical/" + stock_name + "/"
+  s = Stock(stock_name)
+  df = s.historical(days_back=40000, frequency="d")
+  dfb.writeDfTo(path, df)
+
+  dfb = dfWriterDaily()
+
+  intervals = ["1m", "2m"]
+  for interval in intervals:
+    path = (
+      os.getcwd() + "/chives/datahut/data/daily/" + stock_name + "_" + interval + "/"
+    )
+    period = "60d" if interval == "2m" else "7d"
+    df = yf.download(stock_name, period=period, interval=interval, prepost=True)
+    dfb.writeDfTo(path, df)
