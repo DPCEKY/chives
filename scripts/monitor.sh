@@ -1,8 +1,10 @@
 #!/bin/bash
 
-cd ~
+cd ~/chives
 
 git pull
+
+cd ~
 
 python3 -m chives.monitor.dfWriteTester
 
