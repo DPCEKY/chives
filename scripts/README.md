@@ -57,3 +57,14 @@ mail -s "subject" -a "attachment-if-any" "receiver@some-domain.com"
 * gmail less scure app access enable
 https://myaccount.google.com/lesssecureapps
 
+## crontab work set up
+note utc time is used in gcp machine local time, conert it into us eastern time
+```
+0 5 * * *  ~/chives/scripts/monitor.sh  2>&1 | mail -s "chives daily auto sync from crontab" wpw436@gmail.com
+```
+
+common crontab debug cmd
+```
+crontab -e # for non-sudo user
+grep CRON /var/log/syslog # crobtab log
+```
