@@ -19,6 +19,8 @@ sudo apt-get install python3.7
 
 sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 10
 
-pip3 install pandas bs4 scipy yfinance
+pip3 install pandas bs4 scipy
+
+pip3 install git+https://github.com/rodrigobercini/yfinance.git
 
 git pull git@github.com:DPCEKY/chives.git
