@@ -26,7 +26,9 @@ class dfWriterDaily:
           file_ptr = open(filepath, "w")
 
           data_frame[date_last_index:date_end_index].to_csv(
-            path_or_buf=file_ptr, date_format="%Y-%m-%d-%H-%M-%S GMT%z"
+            index=True,
+            path_or_buf=file_ptr,
+            date_format="%Y-%m-%d-%H-%M-%S GMT%z",
           )
           file_ptr.close()
         else:
@@ -60,5 +62,5 @@ class dfWriterDaily:
 
     if new_num > old_num:
       file_ptr = open(full_path, "w")
-      result.to_csv(index=False, path_or_buf=file_ptr)
+      result.to_csv(index=True, path_or_buf=file_ptr)
       file_ptr.close()

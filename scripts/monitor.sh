@@ -6,7 +6,7 @@ git pull
 
 cd ~
 
-python3 -m chives.monitor.dfWriteTester
+python3 -m chives.monitor.run
 
 cd ~/chives
 git add .

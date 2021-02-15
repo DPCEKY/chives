@@ -1,6 +1,7 @@
 import os
 from .dfWriterBase import *
 from .dfWriterDaily import *
+from .dfWriterInfo import *
 from .historical.wallstreet import Stock, Call, Put
 import yfinance as yf
 
@@ -30,7 +31,13 @@ stock_names = [
   "abnb",
 ]
 
-for stock_name in stock_names:
+etfs = [
+  "qqq",
+  "vti",
+  "tqqq",
+]
+
+for stock_name in stock_names + etfs:
   dfb = dfWriterBase()
   path = os.getcwd() + "/chives/datahut/data/historical/" + stock_name + "/"
   s = Stock(stock_name)
@@ -41,9 +48,24 @@ for stock_name in stock_names:
 
   intervals = ["1m", "2m"]
   for interval in intervals:
-    path = (
-      os.getcwd() + "/chives/datahut/data/daily/" + stock_name + "_" + interval + "/"
-    )
+    path = os.getcwd() + "/chives/datahut/data/daily/" \
+                      + stock_name + "_" + interval + "/"
     period = "60d" if interval == "2m" else "7d"
     df = yf.download(stock_name, period=period, interval=interval, prepost=True)
     dfb.writeDfTo(path, df)
+
+for stock_name in stock_names:
+  dfb = dfWriterInfo()
+  path = os.getcwd() + "/chives/datahut/data/info/" + stock_name + "/"
+
+  company = yf.Ticker(stock_name)
+  bs = company.balance_sheet
+  qbs = company.quarterly_balance_sheet
+
+  cf = company.cashflow
+  qcf = company.quarterly_cashflow
+
+  dfb.writeDfTo(path, bs, "bs")
+  dfb.writeDfTo(path, qbs, "qbs")
+  dfb.writeDfTo(path, cf, "cf")
+  dfb.writeDfTo(path, qcf, "qcf")
