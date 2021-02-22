@@ -114,25 +114,3 @@ for stock_name in stock_names:
   missed_options_symbol = get_options(stock_name, dfb, date, path)
 
   missed_options.extend(missed_options_symbol)
-
-# sleep 1 min to rerun the missed ones
-sleep(60)
-print("reruning missed options after 60s")
-
-for option_symbol in missed_options:
-  for i in range(2):
-
-    option = yf.Ticker(option_symbol)
-    df = option.history(period="max")
-
-    if df.shape[0] <= 0:
-      sleep(1)
-      continue
-
-  match = re.search("\d", option_symbol)
-  stock_name = option_symbol[:match.start(0)]
-
-  option_type = "c" if "c" in option_symbol[match.start(0):] else "p"
-
-  dfb.writeDfTo(path + option_type + "/", df, option_symbol)
-  sleep(0.5)
