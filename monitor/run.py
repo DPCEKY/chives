@@ -53,19 +53,3 @@ for stock_name in stock_names + etfs:
     period = "60d" if interval == "2m" else "7d"
     df = yf.download(stock_name, period=period, interval=interval, prepost=True)
     dfb.writeDfTo(path, df)
-
-for stock_name in stock_names:
-  dfb = dfWriterInfo()
-  path = os.getcwd() + "/chives/datahut/data/info/" + stock_name + "/"
-
-  company = yf.Ticker(stock_name)
-  bs = company.balance_sheet
-  qbs = company.quarterly_balance_sheet
-
-  cf = company.cashflow
-  qcf = company.quarterly_cashflow
-
-  dfb.writeDfTo(path, bs, "bs")
-  dfb.writeDfTo(path, qbs, "qbs")
-  dfb.writeDfTo(path, cf, "cf")
-  dfb.writeDfTo(path, qcf, "qcf")
