@@ -6,6 +6,8 @@ from .dfWriterInfo import *
 from .dfWriterOption import *
 from .historical.wallstreet import Stock, Call, Put
 import yfinance as yf
+from time import sleep
+import re
 
 #  run outside the root dir
 
@@ -55,8 +57,15 @@ def get_last_friday_at_16():
 def get_options(stock_name, df_writer, date, path):
 
   stock = yf.Ticker(stock_name)
-  option_dates = stock.options
-  
+  missed_options = []
+
+  try:
+    option_dates = stock.options
+  except:
+    print("connection jam. server returned error. sleep 3s and retry..")
+    sleep(3)
+    get_options(stock_name, df_writer, date, path)
+
   if len(option_dates) <= 0:
     print("cannot get option chain date. return..")
     return
@@ -74,15 +83,56 @@ def get_options(stock_name, df_writer, date, path):
       price_symbol = "0" * (8 - len(price_str)) + price_str
       option_symbol = stock_name + date + option_type + price_symbol
 
-      option = yf.Ticker(option_symbol)
-      df = option.history(period="max")
+      for i in range(2):
+        option = yf.Ticker(option_symbol)
+        df = option.history(period="max")
+        if df.shape[0] <= 0:
+          sleep(0.5)
+        else:
+          break
+
+      if df.shape[0] <= 0:
+        missed_options.append(option_symbol)
+        continue
+
       df_writer.writeDfTo(path + option_type + "/", df, option_symbol)
+      sleep(0.2)
+
+  return missed_options
 
 
 dfb = dfWriterOption()
+
+# retrun the missed ones as yahoo limits requests in a certain peroid of time
+missed_options = []
+
 for stock_name in stock_names:
   date = get_last_friday_at_16().strftime("%Y%m%d")[2:]
 
   path = os.getcwd() + "/chives/datahut/data/option/" + stock_name + "/" + date + "/"
 
-  get_options(stock_name, dfb, date, path)
+  missed_options_symbol = get_options(stock_name, dfb, date, path)
+
+  missed_options.extend(missed_options_symbol)
+
+# sleep 1 min to rerun the missed ones
+sleep(60)
+print("reruning missed options after 60s")
+
+for option_symbol in missed_options:
+  for i in range(2):
+
+    option = yf.Ticker(option_symbol)
+    df = option.history(period="max")
+
+    if df.shape[0] <= 0:
+      sleep(1)
+      continue
+
+  match = re.search("\d", option_symbol)
+  stock_name = option_symbol[:match.start(0)]
+
+  option_type = "c" if "c" in option_symbol[match.start(0):] else "p"
+
+  dfb.writeDfTo(path + option_type + "/", df, option_symbol)
+  sleep(0.5)
