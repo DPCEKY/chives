@@ -8,8 +8,8 @@ import yfinance as yf
 #  run outside the root dir
 
 stock_names = [
-  "fb",
-  # "goog",
+  # "fb",
+  "goog",
   # "aapl",
   # "baba",
   # "amzn",
@@ -31,30 +31,25 @@ stock_names = [
   # "abnb",
 ]
 
-bond_names = [
-  "qqq",
+etfs = [
+  # "qqq",
+  # "vti",
+  # "tqqq",
 ]
 
-print(stock_names + bond_names)
+for stock_name in stock_names + etfs:
+  dfb = dfWriterBase()
+  path = os.getcwd() + "/chives/datahut/data/historical/" + stock_name + "/"
+  s = Stock(stock_name)
+  df = s.historical(days_back=40000, frequency="d")
+  dfb.writeDfTo(path, df)
 
-for stock_name in stock_names:
-  dfb = dfWriterInfo()
-  path = os.getcwd() + "/chives/datahut/data/info/" + stock_name + "/"
+  dfb = dfWriterDaily()
 
-  os.system('rm -rf ' + path)
-
-
-  test_stock = yf.Ticker(stock_name)
-  bs = test_stock.balance_sheet
-  
-  qbs = test_stock.quarterly_balance_sheet
-
-  cf = test_stock.cashflow
-  qcf = test_stock.quarterly_cashflow
-  
-  dfb.writeDfTo(path, bs, "bs")
-  dfb.writeDfTo(path, qbs, "bs")
-  dfb.writeDfTo(path, cf, "cf")
-  dfb.writeDfTo(path, qcf, "cf")
-
-  # dfb.readDfFrom(path)
+  intervals = ["1m", "2m"]
+  for interval in intervals:
+    path = os.getcwd() + "/chives/datahut/data/daily/" \
+                      + stock_name + "_" + interval + "/"
+    period = "60d" if interval == "2m" else "7d"
+    df = yf.download(stock_name, period=period, interval=interval, prepost=True)
+    dfb.writeDfTo(path, df)

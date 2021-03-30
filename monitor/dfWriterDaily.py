@@ -47,7 +47,14 @@ class dfWriterDaily:
     def date_parser(col):
       return pd.to_datetime(col, format="%Y-%m-%d-%H-%M-%S GMT%z")
 
-    old_content = pd.read_csv(full_path, index_col=0, date_parser=date_parser)
+    def date_parser2(col):
+      return pd.to_datetime(col, format="%Y-%m-%d %H:%M:%S-%z", errors='ignore')
+
+    try:
+      old_content = pd.read_csv(full_path, index_col=0, date_parser=date_parser)
+    except:
+      print('wrong format for full_path = {}, using parser v2'.format(full_path))
+      old_content = pd.read_csv(full_path, index_col=0, date_parser=date_parser2)
 
     result = pd.concat([old_content, data_frame])
 
@@ -62,5 +69,9 @@ class dfWriterDaily:
 
     if new_num > old_num:
       file_ptr = open(full_path, "w")
-      result.to_csv(index=True, path_or_buf=file_ptr)
+      result.to_csv(
+        index=True,
+        path_or_buf=file_ptr,
+        date_format="%Y-%m-%d-%H-%M-%S GMT%z",
+      )
       file_ptr.close()
