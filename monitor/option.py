@@ -36,14 +36,14 @@ stock_names = [
 ]
 
 
-def get_last_friday_at_16():
+def get_last_friday_at_16(back_n_day=0):
   current_time = datetime.datetime.now()
 
   # get friday, one week ago, at 16 o'clock
   last_friday = (
     current_time.date()
     - datetime.timedelta(days=current_time.weekday())
-    + datetime.timedelta(days=4, weeks=-1)
+    + datetime.timedelta(days=(4 - back_n_day), weeks=-1)
   )
   last_friday_at_16 = datetime.datetime.combine(last_friday, datetime.time(16))
 
