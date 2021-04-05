@@ -61,6 +61,8 @@ def get_options(stock_name, df_writer, date, path):
 
   try:
     option_dates = stock.options
+    sleep(3)
+    option_dates = stock.options
   except:
     print("connection jam. server returned error. sleep 3s and retry..")
     sleep(3)

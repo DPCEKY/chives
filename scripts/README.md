@@ -61,9 +61,10 @@ https://myaccount.google.com/lesssecureapps
 note utc time is used in gcp machine local time, conert it into us eastern time
 ```
 0 7 * * *  ~/chives/scripts/monitor.sh  2>&1 | mail -s "chives daily auto sync from crontab" wpw436@gmail.com
-0 6 * * 0  ~/chives/scripts/backup_data.sh 2>&1 | mail -s "chives cold storage backup from crontab" wpw436@gmail.com
+0 1 * * 0  ~/chives/scripts/backup_data.sh 2>&1 | mail -s "chives cold storage backup from crontab" wpw436@gmail.com
 0 3 * * 6  ~/chives/scripts/monitor_option.sh 2>&1 | mail -s "chives weekly option monitoring from crontab" wpw436@gmail.com
-0 8 1 * *  ~/chives/scripts/monitor_financial_report.sh 2>&1 | mail -s "chives monthly financial report from crontab" wpw436@gmail.com
+0 5 * * 6  ~/chives/scripts/monitor_option.sh 2>&1 | mail -s "chives weekly option monitoring from crontab" wpw436@gmail.com
+0 0 1 * *  ~/chives/scripts/monitor_financial_report.sh 2>&1 | mail -s "chives monthly financial report from crontab" wpw436@gmail.com
 ```
 
 common crontab debug cmd
