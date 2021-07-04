@@ -2,42 +2,12 @@ import os
 from .dfWriterBase import *
 from .dfWriterDaily import *
 from .dfWriterInfo import *
-from .historical.wallstreet import Stock, Call, Put
+from .portfolio_list import *
 import yfinance as yf
 
 #  run outside the root dir
 
-stock_names = [
-  "fb",
-  "goog",
-  "aapl",
-  "baba",
-  "amzn",
-  "msft",
-  "tsla",
-  "nio",
-  "nflx",
-  "pins",
-  "snap",
-  "uber",
-  "lyft",
-  "xpev",
-  "twtr",
-  "pdd",
-  "bili",
-  "ba",
-  "snow",
-  "crm",
-  "abnb",
-]
-
-etfs = [
-  "qqq",
-  "vti",
-  "tqqq",
-]
-
-for stock_name in stock_names + etfs:
+for stock_name in high_tech + etfs + dow30:
   dfb = dfWriterBase()
   path = os.getcwd() + "/chives/datahut/data/historical/" + stock_name + "/"
   stock = yf.Ticker(stock_name)

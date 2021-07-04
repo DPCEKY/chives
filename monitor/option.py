@@ -4,36 +4,14 @@ from .dfWriterBase import *
 from .dfWriterDaily import *
 from .dfWriterInfo import *
 from .dfWriterOption import *
-from .historical.wallstreet import Stock, Call, Put
+from .portfolio_list import *
 import yfinance as yf
 from time import sleep
 import re
 
 #  run outside the root dir
 
-stock_names = [
-  "fb",
-  "goog",
-  "aapl",
-  "baba",
-  "amzn",
-  "msft",
-  "tsla",
-  "nio",
-  "nflx",
-  "pins",
-  "snap",
-  "uber",
-  "lyft",
-  "xpev",
-  "twtr",
-  "pdd",
-  "bili",
-  "ba",
-  "snow",
-  "crm",
-  "abnb",
-]
+stock_names = high_tech
 
 
 def get_last_friday_at_16(back_n_day=0):
