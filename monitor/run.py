@@ -40,9 +40,10 @@ etfs = [
 for stock_name in stock_names + etfs:
   dfb = dfWriterBase()
   path = os.getcwd() + "/chives/datahut/data/historical/" + stock_name + "/"
-  s = Stock(stock_name)
-  df = s.historical(days_back=40000, frequency="d")
-  dfb.writeDfTo(path, df)
+  stock = yf.Ticker(stock_name)
+  # get historical market data
+  hist = stock.history(period="max")
+  dfb.writeDfTo(path, hist)
 
   dfb = dfWriterDaily()
 
