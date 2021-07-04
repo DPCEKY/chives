@@ -8,7 +8,7 @@ import yfinance as yf
 #  run outside the root dir
 
 dfb = dfWriterInfo()
-for stock_name in high_tech + etfs + dow30:
+for stock_name in high_tech + etfs + dow30 + sp500:
   path = os.getcwd() + "/chives/datahut/data/info/" + stock_name + "/"
 
   company = yf.Ticker(stock_name)
