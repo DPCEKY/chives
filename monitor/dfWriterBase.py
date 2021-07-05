@@ -51,7 +51,7 @@ class dfWriterBase:
     try:
       old_content = pd.read_csv(full_path, index_col=0, date_parser=date_parser)
     except:
-      print('wrong format for full_path = {}, using parser v2'.format(full_path))
+      # print('wrong format for full_path = {}, using parser v2'.format(full_path))
       old_content = pd.read_csv(full_path, index_col=0, date_parser=date_parser2)
 
     result = pd.concat([old_content, data_frame])
