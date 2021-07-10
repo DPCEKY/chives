@@ -45,7 +45,7 @@ class dfWriterDaily:
       return
 
     def date_parser(col):
-      return pd.to_datetime(col, format="%Y-%m-%d-%H-%M-%S GMT%z")
+      return pd.to_datetime(col, format="%Y-%m-%d-%H-%M-%S GMT%z", errors='ignore')
 
     def date_parser2(col):
       return pd.to_datetime(col, format="%Y-%m-%d %H:%M:%S-%z", errors='ignore')
