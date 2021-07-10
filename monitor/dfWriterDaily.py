@@ -13,10 +13,10 @@ class dfWriterDaily:
     if not path.exists(base_path):
       makedirs(base_path)
 
-    last_filename = data_frame.index[0].strftime("%Y-%m-%d")
+    last_filename = pd.to_datetime(data_frame.index[0]).strftime("%Y-%m-%d")
     last_index = 0
     for i in range(1, lines_num):
-      curr_filename = data_frame.index[i].strftime("%Y-%m-%d")
+      curr_filename = pd.to_datetime(data_frame.index[i]).strftime("%Y-%m-%d")
       if last_filename != curr_filename or i >= lines_num - 1:
         filepath = base_path + last_filename + ".csv"
         end_index = lines_num - 1 if i >= lines_num - 1 else i - 1
